@@ -237,9 +237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180276cb0662f27499ca5fb03ad9d03c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mugPrefab: {fileID: 2269679505391857263, guid: 97244c6833fa3a74da357c2db49fdf2b,
+  mugPrefab: {fileID: 1879977133668514993, guid: 97244c6833fa3a74da357c2db49fdf2b,
     type: 3}
-  diamondPrefab: {fileID: 4798425637864326596, guid: 4bdc7d08b2986e747a13147d885ae9dd,
-    type: 3}
-  limitOfLiftedMugs: 2
-  currentLevel: 1
+  currentLevel: 2

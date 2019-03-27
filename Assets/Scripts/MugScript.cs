@@ -11,7 +11,20 @@ public class MugScript : MonoBehaviour
     {
         gameScript = (GameScript) FindObjectOfType(typeof(GameScript));
         animator = GetComponent<Animator>();
-        StartCoroutine("RandomlyAnim");
+        StartCoroutine("JumpRandomly");
+    }
+
+    IEnumerator JumpRandomly()
+    {
+        for (; ; )
+        {
+            yield return new WaitForSeconds(Random.Range(2.0f, 10.0f));
+            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (gameScript.nofLiftedMugs == 0 && animatorStateInfo.IsName("Idle"))
+            {
+                animator.SetTrigger("Jump");
+            }
+        }
     }
 
     void OnMouseDown()
@@ -26,33 +39,11 @@ public class MugScript : MonoBehaviour
 
     public void OnLiftCompleted()
     {
-        if (gameScript.diamond.transform.position.Equals(transform.parent.position))
-        {
-            Animator animator = gameScript.diamond.GetComponentInChildren<Animator>();
-            SpriteRenderer spriteRenderer = gameScript.diamond.GetComponentInChildren<SpriteRenderer>();
-            spriteRenderer.sortingOrder = 2;
-            animator.SetTrigger("ZoomIn");
-        }
-        else {
-            animator.SetTrigger("LayDown");
-        }
+        animator.SetTrigger("LayDown");
     }
 
     public void OnLayDownCompleted()
     {
         gameScript.nofLiftedMugs -= 1;
-    }
-
-    IEnumerator RandomlyAnim()
-    {
-        for (; ; )
-        {
-            yield return new WaitForSeconds(Random.Range(2.0f, 6.0f));
-            AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (gameScript.nofLiftedMugs == 0 && animatorStateInfo.IsName("Idle"))
-            {
-                animator.SetTrigger("Jump");
-            }
-        }
     }
 }
