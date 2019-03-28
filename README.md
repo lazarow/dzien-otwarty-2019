@@ -7,24 +7,24 @@
 3. Dodanie `trigger`-a o nazwie `Jump` w panelu `Animator` i ustawienie maszyny stanów przez dodanie pustego stanu `Idle` oraz dodanie tranzycji do stanu `MugJump` (zmiana nazwy z `MugJumpAnimation`).
 4. Dodanie skryptu `MugScript` i utworzenie `coroutine`-y (współprogram):
 ```cs
-	Animator animator;
-	private void Start()
-	{
-	    animator = GetComponent<Animator>();
-	    StartCoroutine("JumpRandomly");
-	}
-	IEnumerator JumpRandomly()
-	{
-	    for (; ; )
-	    {
-	        yield return new WaitForSeconds(Random.Range(2.0f, 10.0f));
-	        AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-	        if (animatorStateInfo.IsName("Idle"))
-	        {
-	            animator.SetTrigger("Jump");
-	        }
-	    }
-	}
+Animator animator;
+private void Start()
+{
+    animator = GetComponent<Animator>();
+    StartCoroutine("JumpRandomly");
+}
+IEnumerator JumpRandomly()
+{
+    for (; ; )
+    {
+        yield return new WaitForSeconds(Random.Range(2.0f, 10.0f));
+        AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if (animatorStateInfo.IsName("Idle"))
+        {
+            animator.SetTrigger("Jump");
+        }
+    }
+}
 ```
 5. Dodanie skryptu `GameScript` do obiektu `Game` zawierającego logikę gry.
 ```cs
@@ -88,70 +88,70 @@ mugs.Add(mug);
 12. Dodanie animacji `MugLiftAnimation`, `MugLayDownAnimation` oraz `DiamondZoomInAnimation` (pamiętać o kopiowaniu wartości komponentów).
 13. Dodanie w panelu animator wyzwalaczy, stanów oraz tranzycji.
 14. Uzupełnienie skryptu `MugScript` o kod odpowiedzialny za tranzycje i kliknięcie myszą.
-```
-	GameScript gameScript;
+```cs
+GameScript gameScript;
+...
+private void Start()
+{
+    gameScript = (GameScript) FindObjectOfType(typeof(GameScript));
 	...
-	private void Start()
-	{
-	    gameScript = (GameScript) FindObjectOfType(typeof(GameScript));
-		...
-	}
-	IEnumerator JumpRandomly()
-	{
-	    ...
-	        if (gameScript.nofLiftedMugs == 0 && animatorStateInfo.IsName("Idle"))
-	    ...
-	}
-	void OnMouseDown()
-	{
-	    AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-	    if (gameScript.nofLiftedMugs == 0 && animatorStateInfo.IsName("Idle"))
-	    {
-	        gameScript.nofLiftedMugs += 1;
-	        animator.SetTrigger("Lift");
-	    }
-	}
-	public void OnLiftCompleted()
-	{
-	    gameScript.nofClicks += 1;
-	    if (transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
-	    {
-	        animator.SetTrigger("ZoomIn");
-	    }
-	    else
-	    {
-	        animator.SetTrigger("LayDown");
-	    }
-	}
-	public void OnZoomInCompleted()
-	{
-	    if (gameScript.currentLevel < 4) {
-	        gameScript.currentLevel += 1;
-	        gameScript.Init();
-	    }
-	}
-	public void OnLayDownCompleted()
-	{
-	    gameScript.nofLiftedMugs -= 1;
-	}
+}
+IEnumerator JumpRandomly()
+{
+    ...
+        if (gameScript.nofLiftedMugs == 0 && animatorStateInfo.IsName("Idle"))
+    ...
+}
+void OnMouseDown()
+{
+    AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+    if (gameScript.nofLiftedMugs == 0 && animatorStateInfo.IsName("Idle"))
+    {
+        gameScript.nofLiftedMugs += 1;
+        animator.SetTrigger("Lift");
+    }
+}
+public void OnLiftCompleted()
+{
+    gameScript.nofClicks += 1;
+    if (transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+    {
+        animator.SetTrigger("ZoomIn");
+    }
+    else
+    {
+        animator.SetTrigger("LayDown");
+    }
+}
+public void OnZoomInCompleted()
+{
+    if (gameScript.currentLevel < 4) {
+        gameScript.currentLevel += 1;
+        gameScript.Init();
+    }
+}
+public void OnLayDownCompleted()
+{
+    gameScript.nofLiftedMugs -= 1;
+}
 ```
 15. Dodanie elementu `TextMeshPro - Text` o nazwie `Score` do obiektu `HUD`. Ustawienie czcionki na `LuckiestGuy-Regular SDF`, rozmiaru na `42px`, koloru czcionki na `#383234` oraz koloru obrysu o szerokości `0,2` na `#FFFFFF`.
 16. Uzupełnienie skryptu `MugScript` o aktualizację wyniku.
 ```cs
-	...
-	GameObject score;
-	...
-	private void Start()
-	{
-	    gameScript = (GameScript) FindObjectOfType(typeof(GameScript));
-	    animator = GetComponent<Animator>();
-	    score = GameObject.Find("Score");
-	    ...
-	}
-	public void OnLiftCompleted()
-	{
-	    gameScript.nofClicks += 1;
-	    score.GetComponent<TextMeshProUGUI>().text = gameScript.nofClicks.ToString().PadLeft(3, '0');
-	    ...
-	}
+...
+GameObject score;
+...
+private void Start()
+{
+    gameScript = (GameScript) FindObjectOfType(typeof(GameScript));
+    animator = GetComponent<Animator>();
+    score = GameObject.Find("Score");
+    ...
+}
+public void OnLiftCompleted()
+{
+    gameScript.nofClicks += 1;
+    score.GetComponent<TextMeshProUGUI>().text = gameScript.nofClicks.ToString().PadLeft(3, '0');
+    ...
+}
 ```
