@@ -1,16 +1,18 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MugScript : MonoBehaviour
 {
     GameScript gameScript;
     Animator animator;
+    GameObject score;
 
     private void Start()
     {
         gameScript = (GameScript) FindObjectOfType(typeof(GameScript));
         animator = GetComponent<Animator>();
+        score = GameObject.Find("Score");
         StartCoroutine("JumpRandomly");
     }
 
@@ -39,7 +41,24 @@ public class MugScript : MonoBehaviour
 
     public void OnLiftCompleted()
     {
-        animator.SetTrigger("LayDown");
+        gameScript.nofClicks += 1;
+        score.GetComponent<TextMeshProUGUI>().text = gameScript.nofClicks.ToString().PadLeft(3, '0');
+        if (transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
+        {
+            animator.SetTrigger("ZoomIn");
+        }
+        else
+        {
+            animator.SetTrigger("LayDown");
+        }
+    }
+
+    public void OnZoomInCompleted()
+    {
+        if (gameScript.currentLevel < 4) {
+            gameScript.currentLevel += 1;
+            gameScript.Init();
+        }
     }
 
     public void OnLayDownCompleted()

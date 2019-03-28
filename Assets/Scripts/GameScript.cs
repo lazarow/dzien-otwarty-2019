@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameScript : MonoBehaviour
@@ -7,6 +6,8 @@ public class GameScript : MonoBehaviour
     public GameObject mugPrefab;
     [System.NonSerialized]
     public int nofLiftedMugs = 0;
+    [System.NonSerialized]
+    public int nofClicks = 0;
     public int currentLevel = 1;
     private List<GameObject> mugs = new List<GameObject>();
 
@@ -28,15 +29,15 @@ public class GameScript : MonoBehaviour
         int nofMugs = currentLevel * 4;
         int indexOfMugWithDiamond = Random.Range(0, nofMugs);
         int indexOfMug = 0;
-        for (int row = -currentLevel + 1; row < currentLevel; row += 2)
+        for (int row = currentLevel - 1; row > -currentLevel; row -= 2)
         {
             for (int column = -3; column <= 3; column += 2)
             {
                 Vector3 position = new Vector3(column, row, 0);
-                mugs.Add(Instantiate(mugPrefab, position, Quaternion.identity));
-                if (indexOfMug == indexOfMugWithDiamond) {
-                    // @todo: show diamond
-                }
+                GameObject mug = Instantiate(mugPrefab, position, Quaternion.identity);
+                mug.transform.GetChild(0).gameObject.GetComponent<SpriteRenderer>().sortingOrder = indexOfMug + 1;
+                mug.transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled = indexOfMug == indexOfMugWithDiamond;
+                mugs.Add(mug);
                 indexOfMug++;
             }
         }
