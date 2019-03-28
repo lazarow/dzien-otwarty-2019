@@ -381,7 +381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mugPrefab: {fileID: 1879977133668514993, guid: 97244c6833fa3a74da357c2db49fdf2b,
     type: 3}
-  currentLevel: 2
+  currentLevel: 1
 --- !u!1 &1579530890
 GameObject:
   m_ObjectHideFlags: 0
