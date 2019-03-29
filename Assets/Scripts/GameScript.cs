@@ -45,4 +45,20 @@ public class GameScript : MonoBehaviour
         // resets some properties
         nofLiftedMugs = 0;
     }
+
+    public void SwapInit()
+    {
+        int row = Random.Range(1, currentLevel) - 1;
+        int col = Random.Range(0, 2);
+
+        int mugIdx = row * 4 + col;
+
+        mugs[mugIdx].SendMessage("InitAnim", true);
+        mugs[mugIdx + 1].SendMessage("InitAnim", false);
+
+        var temp = mugs[mugIdx];
+
+        mugs[mugIdx] = mugs[mugIdx + 1];
+        mugs[mugIdx + 1] = temp;
+    }
 }

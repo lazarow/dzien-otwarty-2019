@@ -42,6 +42,7 @@ public class MugScript : MonoBehaviour
     public void OnLiftCompleted()
     {
         gameScript.nofClicks += 1;
+
         score.GetComponent<TextMeshProUGUI>().text = gameScript.nofClicks.ToString().PadLeft(3, '0');
         if (transform.GetChild(1).gameObject.GetComponent<SpriteRenderer>().enabled)
         {
@@ -51,7 +52,7 @@ public class MugScript : MonoBehaviour
         {
             animator.SetTrigger("LayDown");
         }
-    }
+    }    
 
     public void OnZoomInCompleted()
     {
@@ -64,5 +65,16 @@ public class MugScript : MonoBehaviour
     public void OnLayDownCompleted()
     {
         gameScript.nofLiftedMugs -= 1;
+
+        if (gameScript.nofClicks % 2 == 0)
+            gameScript.SwapInit();
     }
+
+    public void InitAnim(bool left)
+    {
+        if (left)
+            animator.SetTrigger("SwapLeft");
+        else
+            animator.SetTrigger("SwapRight");
+    }    
 }
